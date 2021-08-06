@@ -58,6 +58,8 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Context\MainDbContext.cs" />
     <Compile Include="Model\Entities\CommonEntity.cs" />
+    <Compile Include="Model\Entities\Items\Item.cs" />
+    <Compile Include="Model\Entities\Items\TaxItem.cs" />
     <Compile Include="Model\Entities\Users\GroupPermission.cs" />
     <Compile Include="Model\Entities\Users\Permission.cs" />
     <Compile Include="Model\Entities\Users\PermissionAlias.cs" />
@@ -73,7 +75,6 @@
     <Folder Include="Controller\" />
     <Folder Include="Model\Entities\Customers\" />
     <Folder Include="Model\Entities\Enums\" />
-    <Folder Include="Model\Entities\Items\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202108050526219_FirstMigration.resx">
