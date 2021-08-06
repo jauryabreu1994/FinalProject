@@ -11,7 +11,7 @@ namespace PosLibrary.Model.Entities.Items
         public string Name { get; set; } = string.Empty;
         public decimal Amount { get; set; } = 0;
 
-        public virtual ICollection<Item> Items { get; set; }
+        public virtual ICollection<Item> Items { get; set; } = null;
 
     }
 }
