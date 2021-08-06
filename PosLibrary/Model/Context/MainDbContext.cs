@@ -2,6 +2,11 @@
 using System;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
+using PosLibrary.Model.Entities.Customers;
+using PosLibrary.Model.Entities.Fiscal;
+using PosLibrary.Model.Entities.Items;
+using PosLibrary.Model.Entities.StoreSetting;
+using PosLibrary.Model.Entities.Transactions;
 
 namespace PosLibrary.Model.Context
 {
@@ -11,10 +16,32 @@ namespace PosLibrary.Model.Context
         public MainDbContext() : base("name=mssql")
         { }
 
+        public DbSet<Customer> Customer { get; set; }
+
+        public DbSet<NcfHistory> NcfHistory { get; set; }
+        public DbSet<NcfSequenceDetail> NcfSequenceDetail { get; set; }
+        public DbSet<NcfType> NcfType { get; set; }
+
+
+        public DbSet<Item> Item { get; set; }
+        public DbSet<ItemDepartment> ItemDepartment { get; set; }
+        public DbSet<ItemDiscount> ItemDiscount { get; set; }
+        public DbSet<ItemTax> ItemTax { get; set; }
+
+        public DbSet<Entities.Payments.PaymentMethod> PaymentMethod { get; set; }
+
+        public DbSet<Store> Store { get; set; }
+
+        public DbSet<TransactionHeader> TransactionHeader { get; set; }
+        public DbSet<TransactionLines> TransactionLines { get; set; }
+        public DbSet<TransactionPayments> TransactionPayments { get; set; }
+
         public DbSet<GroupPermission> GroupPermission { get; set; }
         public DbSet<Permission> Permission { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserGroup> UserGroup { get; set; }
+
+        public DbSet<UserGroup> Vendor { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

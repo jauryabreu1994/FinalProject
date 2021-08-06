@@ -58,13 +58,25 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Context\MainDbContext.cs" />
     <Compile Include="Model\Entities\CommonEntity.cs" />
+    <Compile Include="Model\Entities\Customers\Customer.cs" />
+    <Compile Include="Model\Entities\Fiscal\NcfHistory.cs" />
+    <Compile Include="Model\Entities\Fiscal\NcfSequenceDetail.cs" />
+    <Compile Include="Model\Entities\Fiscal\NcfType.cs" />
     <Compile Include="Model\Entities\Items\Item.cs" />
-    <Compile Include="Model\Entities\Items\TaxItem.cs" />
+    <Compile Include="Model\Entities\Items\ItemDepartment.cs" />
+    <Compile Include="Model\Entities\Items\ItemDiscount.cs" />
+    <Compile Include="Model\Entities\Items\ItemTax.cs" />
+    <Compile Include="Model\Entities\Payments\PaymentMethod.cs" />
+    <Compile Include="Model\Entities\StoreSetting\Store.cs" />
+    <Compile Include="Model\Entities\Transactions\TransactionHeader.cs" />
+    <Compile Include="Model\Entities\Transactions\TransactionLines.cs" />
+    <Compile Include="Model\Entities\Transactions\TransactionPayments.cs" />
     <Compile Include="Model\Entities\Users\GroupPermission.cs" />
     <Compile Include="Model\Entities\Users\Permission.cs" />
     <Compile Include="Model\Entities\Users\PermissionAlias.cs" />
     <Compile Include="Model\Entities\Users\User.cs" />
     <Compile Include="Model\Entities\Users\UserGroup.cs" />
+    <Compile Include="Model\Entities\Vendors\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="Model\Entities\Customers\" />
     <Folder Include="Model\Entities\Enums\" />
   </ItemGroup>
   <ItemGroup>
