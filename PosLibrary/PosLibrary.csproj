@@ -67,6 +67,7 @@
     <Compile Include="Model\Entities\Items\ItemDepartment.cs" />
     <Compile Include="Model\Entities\Items\ItemDiscount.cs" />
     <Compile Include="Model\Entities\Items\ItemTax.cs" />
+    <Compile Include="Model\Entities\OperationResult.cs" />
     <Compile Include="Model\Entities\Payments\PaymentMethod.cs" />
     <Compile Include="Model\Entities\StoreSetting\Store.cs" />
     <Compile Include="Model\Entities\Transactions\TransactionHeader.cs" />
@@ -86,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\Entities\Enums\" />
+    <Folder Include="Model\Entities\Operation Result\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202108100540100_FirstMigration.resx">
