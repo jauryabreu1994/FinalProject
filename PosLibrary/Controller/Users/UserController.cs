@@ -10,15 +10,28 @@ namespace PosLibrary.Controller.Users
 {
     public class UserController
     {
-        public User Get() 
+        public User Get(int ID) 
         {
             using (MainDbContext ctx = new MainDbContext())
             {
-                var line = ctx.User.FirstOrDefault();
-                var u = line.UserGroup.Name;
-                //var list = new GenerateReport().GetCustomerBirthDay(_webHostEnvironment, ctx);
+                var line = ctx.User.Where(x => x.Id == ID).FirstOrDefault();
+                var a = line.UserGroup;
+                
                 return line;
             }
+        }
+
+        public List<User> Getlist(int ID) {
+
+            using (MainDbContext ctx = new MainDbContext()) {
+
+                var lines = ctx.User.Where(a => !a.Deleted && a.Condition_Status).ToList();
+
+                return lines;
+
+
+            }
+
         }
     }
 }
