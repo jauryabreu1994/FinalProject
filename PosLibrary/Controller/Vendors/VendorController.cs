@@ -1,26 +1,22 @@
 ﻿using PosLibrary.Model.Context;
 using PosLibrary.Model.Entities;
-using PosLibrary.Model.Entities.User;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
+using PosLibrary.Model.Entities.Vendors;
 
-namespace PosLibrary.Controller.Users
+namespace PosLibrary.Controller.Vendors
 {
-    public class UserController : IMainController
+    public class VendorController : IMainController
     {
+        private string message = "Vendor not Exist";
         public CommonResult Get(int Id) 
         {
             try
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var line = ctx.User.Where(x => x.Id == Id).FirstOrDefault();
-                    var data_1 = line.UserGroup;
-
+                    var line = ctx.Vendor.Where(x => x.Id == Id).FirstOrDefault();
+                    var data_1 = line.Items.ToList();
                     return new CommonResult(true, string.Empty, line);
                 }
             }
@@ -36,7 +32,7 @@ namespace PosLibrary.Controller.Users
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.User.Where(a => !a.Deleted && a.Condition_Status).ToList();
+                    var lines = ctx.Vendor.Where(a => !a.Deleted && a.Condition_Status).ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
@@ -56,9 +52,9 @@ namespace PosLibrary.Controller.Users
 
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.User.Where(a =>(a.FirstName.Contains(filter) || 
+                    var lines = ctx.Vendor.Where(a =>(a.FirstName.Contains(filter) || 
                                                    a.LastName.Contains(filter) || 
-                                                   a.UserId.Contains(filter)) &&  
+                                                   a.VendorId.Contains(filter)) &&  
                                                    !a.Deleted && a.Condition_Status).ToList();
 
                     return new CommonResult(true, string.Empty, lines);
@@ -74,31 +70,29 @@ namespace PosLibrary.Controller.Users
         {
             try
             {
-                User user = (User)data;
+                Vendor _data = (Vendor)data;
 
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    if (user.Id == 0)
+                    if (_data.Id == 0)
                     {
-                        ctx.User.Add(user);
+                        ctx.Vendor.Add(_data);
                     }
                     else
                     {
-                        var currentUser = ctx.User.Where(x => x.Id == user.Id).FirstOrDefault();
-                        if (currentUser != null)
+                        var currentVendor = ctx.Vendor.Where(x => x.Id == _data.Id).FirstOrDefault();
+                        if (currentVendor != null)
                         {
-                            currentUser.FirstName = user.FirstName;
-                            currentUser.LastName = user.LastName;
-                            currentUser.Address = user.Address;
-                            currentUser.UpdatedDate = DateTime.Now;
-                            currentUser.Email = user.Email;
-                            currentUser.Gender = user.Gender;
-                            currentUser.Phone = user.Phone;
-                            currentUser.VatNumber = user.VatNumber;
-                            currentUser.UserGroupId = user.UserGroupId;
+                            currentVendor.FirstName = _data.FirstName;
+                            currentVendor.LastName = _data.LastName;
+                            currentVendor.Address = _data.Address;
+                            currentVendor.UpdatedDate = DateTime.Now;
+                            currentVendor.CompanyName = _data.CompanyName;
+                            currentVendor.Phone = _data.Phone;
+                            currentVendor.VatNumber = _data.Phone;
                         }
                         else
-                            return new CommonResult(false, "User Not Exist",null);
+                            return new CommonResult(false, message,null);
 
                     }
                     ctx.SaveChanges();
@@ -119,13 +113,13 @@ namespace PosLibrary.Controller.Users
                 using (MainDbContext ctx = new MainDbContext())
                 {
 
-                    var currentUser = ctx.User.Where(x => x.Id == Id).FirstOrDefault();
-                    if (currentUser != null)
+                    var currentVendor = ctx.Vendor.Where(x => x.Id == Id).FirstOrDefault();
+                    if (currentVendor != null)
                     {
-                        currentUser.Condition_Status = false;
+                        currentVendor.Condition_Status = false;
                     }
                     else
-                        return new CommonResult(false, "User Not Exist", null);
+                        return new CommonResult(false, message, null);
 
 
                     ctx.SaveChanges();
@@ -146,14 +140,14 @@ namespace PosLibrary.Controller.Users
                 using (MainDbContext ctx = new MainDbContext())
                 {
 
-                    var currentUser = ctx.User.Where(x => x.Id == Id).FirstOrDefault();
-                    if (currentUser != null)
+                    var currentVendor = ctx.Vendor.Where(x => x.Id == Id).FirstOrDefault();
+                    if (currentVendor != null)
                     {
-                        currentUser.Condition_Status = false;
-                        currentUser.Deleted = true;
+                        currentVendor.Condition_Status = false;
+                        currentVendor.Deleted = true;
                     }
                     else
-                        return new CommonResult(false, "User Not Exist", null);
+                        return new CommonResult(false, message, null);
 
 
                     ctx.SaveChanges();

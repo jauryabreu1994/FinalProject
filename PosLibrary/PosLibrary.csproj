@@ -51,7 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\IMainController.cs" />
     <Compile Include="Controller\Users\UserController.cs" />
+    <Compile Include="Controller\Vendors\VendorController.cs" />
     <Compile Include="Migrations\202108100540100_FirstMigration.cs" />
     <Compile Include="Migrations\202108100540100_FirstMigration.designer.cs">
       <DependentUpon>202108100540100_FirstMigration.cs</DependentUpon>
@@ -59,6 +61,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Context\MainDbContext.cs" />
     <Compile Include="Model\Entities\CommonEntity.cs" />
+    <Compile Include="Model\Entities\CommonResult.cs" />
     <Compile Include="Model\Entities\Customers\Customer.cs" />
     <Compile Include="Model\Entities\Fiscal\NcfHistory.cs" />
     <Compile Include="Model\Entities\Fiscal\NcfSequenceDetail.cs" />
@@ -67,7 +70,6 @@
     <Compile Include="Model\Entities\Items\ItemDepartment.cs" />
     <Compile Include="Model\Entities\Items\ItemDiscount.cs" />
     <Compile Include="Model\Entities\Items\ItemTax.cs" />
-    <Compile Include="Model\Entities\OperationResult.cs" />
     <Compile Include="Model\Entities\Payments\PaymentMethod.cs" />
     <Compile Include="Model\Entities\StoreSetting\Store.cs" />
     <Compile Include="Model\Entities\Transactions\TransactionHeader.cs" />
