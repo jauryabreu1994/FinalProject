@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PosLibrary.Model.Entities.Vendors
 {
-    public class Vendor
+    public class Vendor : CommonEntity
     {
         public string VendorId { get; set; }
         public string FirstName { get; set; }

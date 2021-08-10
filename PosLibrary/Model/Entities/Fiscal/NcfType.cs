@@ -2,7 +2,7 @@
 
 namespace PosLibrary.Model.Entities.Fiscal
 {
-    public class NcfType
+    public class NcfType : CommonEntity
     {
         public int NcfId { get; set; }
         public bool IsDefaultSale { get; set; }
