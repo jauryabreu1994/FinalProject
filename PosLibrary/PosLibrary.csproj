@@ -51,7 +51,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Customers\CustomerController.cs" />
+    <Compile Include="Controller\Fiscal\NcfTypeController.cs" />
+    <Compile Include="Controller\Fiscal\NcfSequenceDetailController.cs" />
+    <Compile Include="Controller\Fiscal\NcfHistoryController.cs" />
     <Compile Include="Controller\IMainController.cs" />
+    <Compile Include="Controller\Items\ItemTaxController.cs" />
+    <Compile Include="Controller\Items\ItemDiscountController.cs" />
+    <Compile Include="Controller\Items\ItemDepartmentController.cs" />
+    <Compile Include="Controller\Items\ItemController.cs" />
+    <Compile Include="Controller\Payments\PaymentMethodController.cs" />
+    <Compile Include="Controller\StoreSetting\StoreController.cs" />
+    <Compile Include="Controller\Transactions\TransactionPaymentsController.cs" />
+    <Compile Include="Controller\Transactions\TransactionLinesController.cs" />
+    <Compile Include="Controller\Transactions\TransactionHeaderController.cs" />
+    <Compile Include="Controller\Users\GroupPermissionController.cs" />
+    <Compile Include="Controller\Users\UserGroupController.cs" />
+    <Compile Include="Controller\Users\PermissionController.cs" />
     <Compile Include="Controller\Users\UserController.cs" />
     <Compile Include="Controller\Vendors\VendorController.cs" />
     <Compile Include="Migrations\202108100540100_FirstMigration.cs" />
@@ -89,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\Entities\Enums\" />
-    <Folder Include="Model\Entities\Operation Result\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202108100540100_FirstMigration.resx">
