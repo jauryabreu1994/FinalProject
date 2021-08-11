@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using HashLib;
 
 namespace PosLibrary.Controller.Users
 {
@@ -80,6 +81,7 @@ namespace PosLibrary.Controller.Users
                 {
                     if (user.Id == 0)
                     {
+                        user.Password = EncryptPassword(user.Password);
                         ctx.User.Add(user);
                     }
                     else
@@ -167,5 +169,70 @@ namespace PosLibrary.Controller.Users
             }
         }
 
+
+        public CommonResult LogIn(string userId, string password)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    var user = ctx.User.Where(x => x.UserId == userId || x.Email == userId).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        if (user.Password == EncryptPassword(password)) 
+                        {
+                            return new CommonResult(true, string.Empty, user);
+                        }
+                        else
+                            return new CommonResult(false, "Contraseña Incorrecta", null);
+                    }
+                    else
+                        return new CommonResult(false, "Usuario o Correo no existe", null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
+        public CommonResult UpdatePassword(int Id, string currentPassword, string newPassword)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    var user = ctx.User.Where(x => x.Id == Id).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        if (user.Password == EncryptPassword(currentPassword))
+                        {
+                            user.Password = EncryptPassword(newPassword);
+                            ctx.SaveChanges();
+
+                            return new CommonResult(true, string.Empty, user);
+                        }
+                        else
+                            return new CommonResult(false, "Contraseña Incorrecta", null);
+                    }
+                    else
+                        return new CommonResult(false, "Usuario no existe", null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
+
+        private string EncryptPassword(string password) 
+        {
+            IHash hash = HashFactory.Crypto.SHA3.CreateKeccak512();
+            HashResult res = hash.ComputeString(password, Encoding.ASCII);
+            return res.ToString();
+        }
     }
 }
