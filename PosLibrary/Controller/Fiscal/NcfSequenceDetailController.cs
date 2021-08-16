@@ -64,6 +64,24 @@ namespace PosLibrary.Controller.Fiscal
             }
         }
 
+        public CommonResult GetList(int ncfId)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    var lines = ctx.NcfSequenceDetail.Where(a => a.NcfId == ncfId &&
+                                                   !a.Deleted && a.Condition_Status).ToList();
+
+                    return new CommonResult(true, string.Empty, lines);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
         public CommonResult Save(object data) 
         {
             try

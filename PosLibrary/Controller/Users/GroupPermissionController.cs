@@ -1,6 +1,6 @@
 ﻿using PosLibrary.Model.Context;
 using PosLibrary.Model.Entities;
-using PosLibrary.Model.Entities.User;
+using PosLibrary.Model.Entities.Users;
 using System;
 using System.Linq;
 
@@ -15,7 +15,6 @@ namespace PosLibrary.Controller.Users
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     var line = ctx.GroupPermission.Where(x => x.Id == Id).FirstOrDefault();
-                    var data_1 = line.Permission;
                     var data_2 = line.UserGroup;
 
                     return new CommonResult(true, string.Empty, line);
@@ -55,7 +54,22 @@ namespace PosLibrary.Controller.Users
                 return new CommonResult(false, ex.Message, null);
             }
         }
+        public CommonResult GetList(int UserGroupId)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    var lines = ctx.GroupPermission.Where(a => a.UserGroupId == UserGroupId && !a.Deleted && a.Condition_Status).ToList();
 
+                    return new CommonResult(true, string.Empty, lines);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
         public CommonResult Save(object data) 
         {
             try
@@ -64,18 +78,20 @@ namespace PosLibrary.Controller.Users
 
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    if (user.Id == 0)
+                    if (!ctx.GroupPermission.Any(a=> a.UserGroupId == user.UserGroupId && a.PermissionCode == user.PermissionCode))
                     {
                         ctx.GroupPermission.Add(user);
                     }
                     else
                     {
-                        var currentGroupPermission = ctx.GroupPermission.Where(x => x.Id == user.Id).FirstOrDefault();
+                        var currentGroupPermission = ctx.GroupPermission.Where(a => a.UserGroupId == user.UserGroupId && a.PermissionCode == user.PermissionCode).FirstOrDefault();
                         if (currentGroupPermission != null)
                         {
                             currentGroupPermission.UserGroupId = user.UserGroupId;
-                            currentGroupPermission.PermissionId = user.PermissionId;
+                            currentGroupPermission.PermissionCode = user.PermissionCode;
                             currentGroupPermission.UpdatedDate = DateTime.Now;
+                            currentGroupPermission.Condition_Status = true;
+                            currentGroupPermission.Deleted = false;
                         }
                         else
                             return new CommonResult(false, "GroupPermission Not Exist",null);
@@ -118,6 +134,35 @@ namespace PosLibrary.Controller.Users
                 return new CommonResult(false, ex.Message, null);
             }
         }
+
+        public CommonResult ChangeGeneralStatus(int UserGroupId)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+
+                    var currentGroupPermission = ctx.GroupPermission.Where(x => x.UserGroupId == UserGroupId).ToList();
+                    if (currentGroupPermission != null)
+                    {
+                        foreach (var item in currentGroupPermission)
+                            item.Condition_Status = false;
+                    }
+                    else
+                        return new CommonResult(false, "GroupPermission not found", null);
+
+
+                    ctx.SaveChanges();
+
+                    return new CommonResult(true, string.Empty, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
 
         public CommonResult Delete(int Id)
         {

@@ -1,6 +1,6 @@
 ﻿using PosLibrary.Model.Context;
 using PosLibrary.Model.Entities;
-using PosLibrary.Model.Entities.User;
+using PosLibrary.Model.Entities.Users;
 using System;
 using System.Linq;
 

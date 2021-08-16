@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FirstMigration : DbMigration
+    public partial class MigrationFirst : DbMigration
     {
         public override void Up()
         {
@@ -200,31 +200,18 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserGroupId = c.Int(nullable: false),
-                        PermissionId = c.Int(nullable: false),
+                        PermissionCode = c.String(nullable: false, maxLength: 50),
                         Deleted = c.Boolean(nullable: false),
                         Condition_Status = c.Boolean(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         UpdatedDate = c.DateTime(nullable: false),
+                        Permission_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Permission", t => t.PermissionId, cascadeDelete: true)
                 .ForeignKey("dbo.UserGroup", t => t.UserGroupId, cascadeDelete: true)
+                .ForeignKey("dbo.Permission", t => t.Permission_Id)
                 .Index(t => t.UserGroupId)
-                .Index(t => t.PermissionId);
-            
-            CreateTable(
-                "dbo.Permission",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 100, unicode: false),
-                        Code = c.String(),
-                        Deleted = c.Boolean(nullable: false),
-                        Condition_Status = c.Boolean(nullable: false),
-                        CreatedDate = c.DateTime(nullable: false),
-                        UpdatedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
+                .Index(t => t.Permission_Id);
             
             CreateTable(
                 "dbo.UserGroup",
@@ -328,6 +315,20 @@
                 .Index(t => t.NcfId);
             
             CreateTable(
+                "dbo.Permission",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 100, unicode: false),
+                        Code = c.String(),
+                        Deleted = c.Boolean(nullable: false),
+                        Condition_Status = c.Boolean(nullable: false),
+                        CreatedDate = c.DateTime(nullable: false),
+                        UpdatedDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.Store",
                 c => new
                     {
@@ -352,11 +353,11 @@
         
         public override void Down()
         {
+            DropForeignKey("dbo.GroupPermission", "Permission_Id", "dbo.Permission");
             DropForeignKey("dbo.NcfSequenceDetail", "NcfId", "dbo.NcfType");
             DropForeignKey("dbo.NcfHistory", "NcfTypeId", "dbo.NcfType");
             DropForeignKey("dbo.User", "UserGroupId", "dbo.UserGroup");
             DropForeignKey("dbo.GroupPermission", "UserGroupId", "dbo.UserGroup");
-            DropForeignKey("dbo.GroupPermission", "PermissionId", "dbo.Permission");
             DropForeignKey("dbo.TransactionHeader", "CustomerId", "dbo.Customer");
             DropForeignKey("dbo.TransactionPayments", "TransactionHeaderId", "dbo.TransactionHeader");
             DropForeignKey("dbo.TransactionPayments", "PaymentMethodId", "dbo.PaymentMethod");
@@ -369,7 +370,7 @@
             DropIndex("dbo.NcfSequenceDetail", new[] { "NcfId" });
             DropIndex("dbo.NcfHistory", new[] { "NcfTypeId" });
             DropIndex("dbo.User", new[] { "UserGroupId" });
-            DropIndex("dbo.GroupPermission", new[] { "PermissionId" });
+            DropIndex("dbo.GroupPermission", new[] { "Permission_Id" });
             DropIndex("dbo.GroupPermission", new[] { "UserGroupId" });
             DropIndex("dbo.TransactionPayments", new[] { "TransactionHeaderId" });
             DropIndex("dbo.TransactionPayments", new[] { "PaymentMethodId" });
@@ -381,12 +382,12 @@
             DropIndex("dbo.TransactionLines", new[] { "ItemId" });
             DropIndex("dbo.TransactionHeader", new[] { "CustomerId" });
             DropTable("dbo.Store");
+            DropTable("dbo.Permission");
             DropTable("dbo.NcfSequenceDetail");
             DropTable("dbo.NcfType");
             DropTable("dbo.NcfHistory");
             DropTable("dbo.User");
             DropTable("dbo.UserGroup");
-            DropTable("dbo.Permission");
             DropTable("dbo.GroupPermission");
             DropTable("dbo.PaymentMethod");
             DropTable("dbo.TransactionPayments");

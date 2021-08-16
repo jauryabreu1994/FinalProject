@@ -1,11 +1,9 @@
-﻿namespace PosLibrary.Model.Entities.User
+﻿namespace PosLibrary.Model.Entities.Users
 {
     public class GroupPermission : CommonEntity
     {
         public int UserGroupId { get; set; } = 1;
-        public int PermissionId { get; set; } = 1;
-
-        public virtual Permission Permission { get; set; }
+        public string PermissionCode { get; set; } = string.Empty;
         public virtual UserGroup UserGroup { get; set; }
 
     }

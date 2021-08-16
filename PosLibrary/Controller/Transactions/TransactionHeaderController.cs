@@ -33,8 +33,14 @@ namespace PosLibrary.Controller.Transactions
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.TransactionHeader.Where(a => !a.Deleted && a.Condition_Status).ToList();
-
+                    var lines = ctx.TransactionHeader.Where(a => !a.Deleted && 
+                                                                  a.Condition_Status).ToList();
+                    foreach (var item in lines)
+                    {
+                        var a = item.Customer;
+                        var b = item.TransactionLines.ToList();
+                        var c = item.TransactionPayments.ToList();
+                    }
                     return new CommonResult(true, string.Empty, lines);
                 }
             }

@@ -1,6 +1,6 @@
 ﻿using PosLibrary.Model.Context;
 using PosLibrary.Model.Entities;
-using PosLibrary.Model.Entities.User;
+using PosLibrary.Model.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +81,7 @@ namespace PosLibrary.Controller.Users
                 {
                     if (user.Id == 0)
                     {
-                        user.Password = EncryptPassword(user.Password);
+                        user.Password = EncryptPassword("12345");
                         ctx.User.Add(user);
                     }
                     else

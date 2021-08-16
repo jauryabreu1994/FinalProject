@@ -7,13 +7,13 @@ namespace PosLibrary.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class FirstMigration : IMigrationMetadata
+    public sealed partial class MigrationFirst : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(MigrationFirst));
         
         string IMigrationMetadata.Id
         {
-            get { return "202108100540100_FirstMigration"; }
+            get { return "202108152113425_MigrationFirst"; }
         }
         
         string IMigrationMetadata.Source
