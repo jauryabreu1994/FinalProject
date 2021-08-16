@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PosLibrary.Model.Entities.User
+namespace PosLibrary.Model.Entities.Users
 {
     public class Permission : CommonEntity
     {

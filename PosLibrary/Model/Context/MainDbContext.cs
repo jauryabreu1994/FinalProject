@@ -1,4 +1,4 @@
-﻿using PosLibrary.Model.Entities.User;
+﻿using PosLibrary.Model.Entities.Users;
 using System;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -184,11 +184,6 @@ namespace PosLibrary.Model.Context
                 .HasMaxLength(100)
                 .HasColumnType("varchar")
                 .IsRequired();
-
-            modelBuilder.Entity<Permission>()
-                .HasMany(a => a.GroupPermissions)
-                .WithRequired(b => b.Permission)
-                .HasForeignKey(c => c.PermissionId);
             #endregion
 
             #region Group Permission
@@ -197,13 +192,9 @@ namespace PosLibrary.Model.Context
                 .HasKey(a => a.Id);
 
             modelBuilder.Entity<GroupPermission>()
-                .Property(a => a.PermissionId)
-                .HasColumnType("int")
-                .IsRequired();
-
-            modelBuilder.Entity<GroupPermission>()
-                .Property(a => a.PermissionId)
-                .HasColumnType("int")
+                .Property(a => a.PermissionCode)
+                .HasMaxLength(50)
+                .HasColumnType("nvarchar")
                 .IsRequired();
             #endregion
 

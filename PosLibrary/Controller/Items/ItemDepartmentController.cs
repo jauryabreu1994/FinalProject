@@ -33,7 +33,10 @@ namespace PosLibrary.Controller.Items
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     var lines = ctx.ItemDepartment.Where(a => !a.Deleted && a.Condition_Status).ToList();
-
+                    foreach (var item in lines)
+                    {
+                        var a = item.Items.ToList();
+                    }
                     return new CommonResult(true, string.Empty, lines);
                 }
             }
