@@ -182,6 +182,8 @@ namespace PosLibrary.Controller.Users
                     {
                         if (user.Password == EncryptPassword(password)) 
                         {
+                            var a = user.UserGroup;
+                            var b = user.UserGroup.GroupPermissions;
                             return new CommonResult(true, string.Empty, user);
                         }
                         else

@@ -4,11 +4,11 @@ using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Payments;
 
-namespace PosLibrary.Controller.Items
+namespace PosLibrary.Controller.Payments
 {
     public class PaymentMethodController : IMainController
     {
-        private string message = "Department not Exist";
+        private string message = "Payment Method not Exist";
         public CommonResult Get(int Id) 
         {
             try
@@ -82,6 +82,11 @@ namespace PosLibrary.Controller.Items
                         if (currentDepartment != null)
                         {
                             currentDepartment.Name = _data.Name;
+                            currentDepartment.IsMainTender = _data.IsMainTender;
+                            currentDepartment.OverTender = _data.OverTender;
+                            currentDepartment.UnderTender = _data.UnderTender;
+                            currentDepartment.ToSales = _data.ToSales;
+                            currentDepartment.ToReturn = _data.ToReturn;
                             currentDepartment.UpdatedDate = DateTime.Now;
                         }
                         else
