@@ -572,6 +572,31 @@ namespace PosLibrary.Model.Context
                 .IsRequired();
 
             modelBuilder.Entity<PaymentMethod>()
+                .Property(a => a.IsMainTender)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            modelBuilder.Entity<PaymentMethod>()
+                .Property(a => a.ToSales)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            modelBuilder.Entity<PaymentMethod>()
+                .Property(a => a.ToReturn)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            modelBuilder.Entity<PaymentMethod>()
+                .Property(a => a.OverTender)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            modelBuilder.Entity<PaymentMethod>()
+                .Property(a => a.UnderTender)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            modelBuilder.Entity<PaymentMethod>()
                 .HasMany(a => a.TransactionPayments)
                 .WithRequired(b => b.PaymentMethod)
                 .HasForeignKey(c => c.PaymentMethodId);

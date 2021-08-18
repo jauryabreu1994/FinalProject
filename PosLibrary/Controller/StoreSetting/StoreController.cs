@@ -3,6 +3,7 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.StoreSetting;
+using PosLibrary.Model.Entities.Enums;
 
 namespace PosLibrary.Controller.StoreSetting
 {
@@ -15,7 +16,9 @@ namespace PosLibrary.Controller.StoreSetting
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var line = ctx.Store.Where(x => x.Id == Id).FirstOrDefault();
+                    var line = Id != 0 ?
+                            ctx.Store.Where(x => x.Id == Id).FirstOrDefault() :
+                            ctx.Store.FirstOrDefault();
                     return new CommonResult(true, string.Empty, line);
                 }
             }
@@ -161,5 +164,39 @@ namespace PosLibrary.Controller.StoreSetting
             }
         }
 
+        public CommonResult GenerateId(StoreTableType type) 
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    Store store = ctx.Store.FirstOrDefault();
+                    string valueToReturn = string.Empty;
+
+                    switch (type)
+                    {
+                        case StoreTableType.Customer:
+                            valueToReturn = String.Format("C{0:000000000}", store.CustomerId);
+                            store.CustomerId++;
+                            break;
+                        case StoreTableType.Receipt:
+                            valueToReturn = String.Format("T{0:000000000}", store.ReceiptId);
+                            store.ReceiptId++;
+                            break;
+                        case StoreTableType.Vendor:
+                            valueToReturn = String.Format("V{0:000000000}", store.VendorId);
+                            store.VendorId++;
+                            break;
+                    }
+
+                    ctx.SaveChanges();
+                    return new CommonResult(true, string.Empty, valueToReturn);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
     }
 }

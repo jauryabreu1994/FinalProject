@@ -79,11 +79,16 @@
     <Compile Include="Migrations\202108152113425_MigrationFirst.designer.cs">
       <DependentUpon>202108152113425_MigrationFirst.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108170403090_PaymentColumn.cs" />
+    <Compile Include="Migrations\202108170403090_PaymentColumn.designer.cs">
+      <DependentUpon>202108170403090_PaymentColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Context\MainDbContext.cs" />
     <Compile Include="Model\Entities\CommonEntity.cs" />
     <Compile Include="Model\Entities\CommonResult.cs" />
     <Compile Include="Model\Entities\Customers\Customer.cs" />
+    <Compile Include="Model\Entities\Enums\StoreTableType.cs" />
     <Compile Include="Model\Entities\Fiscal\NcfHistory.cs" />
     <Compile Include="Model\Entities\Fiscal\NcfSequenceDetail.cs" />
     <Compile Include="Model\Entities\Fiscal\NcfType.cs" />
@@ -113,12 +118,13 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Entities\Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202108152113425_MigrationFirst.resx">
       <DependentUpon>202108152113425_MigrationFirst.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108170403090_PaymentColumn.resx">
+      <DependentUpon>202108170403090_PaymentColumn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
