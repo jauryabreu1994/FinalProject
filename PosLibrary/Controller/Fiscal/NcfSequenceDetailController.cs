@@ -3,6 +3,8 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Fiscal;
+using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace PosLibrary.Controller.Fiscal
 {
@@ -180,5 +182,87 @@ namespace PosLibrary.Controller.Fiscal
             }
         }
 
+        public NcfSequenceDetail GetNcfStatus(int ncfId, int process)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+
+                    //var parameters = new List<SqlParameter>();
+                    //parameters.Add(new SqlParameter("@_NCFID", ncfId));
+                    //parameters.Add(new SqlParameter("@_PROCESS", process));
+                    //var lines = ctx.Database.SqlQuery<NcfSequenceDetail>(" Exec usp_ApplyNCFToUse @_NCFID, @_PROCESS", parameters);
+                    string query = string.Format("Exec usp_ApplyNCFToUse {0}, {1}", ncfId, process);
+                    var lines = ctx.Database.SqlQuery<NcfSequenceDetail>(query);
+
+                    return lines.FirstOrDefault();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+
+        }
+
+        public string ValidateNCFSequence(int ncfId)
+        {
+            try
+            {
+                NcfSequenceDetail nCF = GetNcfStatus(ncfId, 0);
+
+                if (nCF.SeqStatus == 2)
+                {
+                    return "Ultima secuencia de NCF utilizada...";
+                }
+                else if (nCF.SeqStatus == 3)
+                {
+                    return "Fecha de secuencia  NCF vencida por rango de fecha...";
+                }
+                else if (string.IsNullOrEmpty(nCF.Serie))
+                {
+                    return "No tiene secuencia disponible de NCF...";
+                }
+                else if (nCF.SeqEnd < nCF.SeqNext)
+                {
+                    return "Ultimo NCF utilizado - Debe agregar una sequencia de NCF (" + nCF.DGIIDescription + "): \n"
+                                        + nCF.SeqNext + " de " + nCF.SeqEnd + " - Caja. ";
+                }
+                else if (ValidateNCFInUse(nCF.SeqNext, nCF.SeqEnd))
+                {
+                    return "Debe agregar una sequencia de NCF - Sencuencias NCF disponibles ("
+                                   + nCF.DGIIDescription + "): " + Math.Abs(nCF.SeqEnd - nCF.SeqNext) + " Disponibles. ";
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return "No tiene secuencia disponible de NCF... \r\n" + ex.Message;
+            }
+        }
+
+        private bool ValidateNCFInUse(int InUse, int Top)
+        {
+            int StartAlet = 100;
+            int IntervalAlert = 10;
+
+            if (Top - StartAlet == InUse)
+                return true;
+            else if (Top - StartAlet < InUse)
+            {
+                int intervalo = StartAlet / IntervalAlert;
+
+                for (int i = 0; i <= intervalo; i++)
+                {
+                    if ((i * IntervalAlert) == (Top - InUse))
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 }
