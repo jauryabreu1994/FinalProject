@@ -176,14 +176,12 @@ namespace PosLibrary.Controller.Users
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var user = ctx.User.Where(x => x.UserId == userId || x.Email == userId).FirstOrDefault();
+                    var user = ctx.User.Where(x => x.UserId == userId || x.Email == userId).Include(a=>a.UserGroup).Include(a=>a.UserGroup.GroupPermissions).FirstOrDefault();
 
                     if (user != null)
                     {
                         if (user.Password == EncryptPassword(password)) 
                         {
-                            var a = user.UserGroup;
-                            var b = user.UserGroup.GroupPermissions;
                             return new CommonResult(true, string.Empty, user);
                         }
                         else

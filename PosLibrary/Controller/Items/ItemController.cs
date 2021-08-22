@@ -3,6 +3,7 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Items;
+using System.Data.Entity;
 
 namespace PosLibrary.Controller.Items
 {
@@ -15,7 +16,32 @@ namespace PosLibrary.Controller.Items
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var line = ctx.Item.Where(x => x.Id == Id).FirstOrDefault();
+                    var line = ctx.Item.Where(x => x.Id == Id)
+                                       .Include(v=>v.Vendor)
+                                       .Include(id => id.ItemDepartment)
+                                       .Include(id => id.ItemDiscount)
+                                       .Include(it => it.ItemTax)
+                                       .FirstOrDefault();
+                    //var data_1 = line.Vendor;
+                    //var data_2 = line.ItemDepartment;
+                    //var data_3 = line.ItemDiscount;
+                    //var data_4 = line.ItemTax;
+                    return new CommonResult(true, string.Empty, line);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
+        public CommonResult Get(string sku)
+        {
+            try
+            {
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    var line = ctx.Item.Where(x => x.Sku == sku).FirstOrDefault();
                     var data_1 = line.Vendor;
                     var data_2 = line.ItemDepartment;
                     var data_3 = line.ItemDiscount;
