@@ -3,6 +3,8 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Transactions;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace PosLibrary.Controller.Transactions
 {
@@ -15,9 +17,10 @@ namespace PosLibrary.Controller.Transactions
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var line = ctx.TransactionPayments.Where(x => x.Id == Id).FirstOrDefault();
-                    var data_1 = line.TransactionHeader;
-                    var data_2 = line.PaymentMethod;
+                    var line = ctx.TransactionPayments.Where(x => x.Id == Id)
+                                    .Include(a => a.PaymentMethod)
+                                    .Include(a => a.TransactionHeader)
+                                    .FirstOrDefault();
                     return new CommonResult(true, string.Empty, line);
                 }
             }
@@ -33,7 +36,10 @@ namespace PosLibrary.Controller.Transactions
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.TransactionPayments.Where(a => !a.Deleted && a.Condition_Status).ToList();
+                    var lines = ctx.TransactionPayments.Where(a => !a.Deleted && a.Condition_Status)
+                                    .Include(a => a.PaymentMethod)
+                                    .Include(a => a.TransactionHeader)
+                                    .ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
@@ -54,7 +60,10 @@ namespace PosLibrary.Controller.Transactions
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     var lines = ctx.TransactionPayments.Where(a =>(a.ReceiptId.Contains(filter)) &&  
-                                                   !a.Deleted && a.Condition_Status).ToList();
+                                                   !a.Deleted && a.Condition_Status)
+                                    .Include(a => a.PaymentMethod)
+                                    .Include(a => a.TransactionHeader)
+                                    .ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
@@ -85,7 +94,31 @@ namespace PosLibrary.Controller.Transactions
                 return new CommonResult(false, ex.Message, null);
             }
         }
+        public CommonResult SaveList(object data)
+        {
+            try
+            {
+                var collection = data as List<TransactionPayments>;
 
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    foreach (var pay in collection)
+                    {
+                        pay.Id = 0;
+                        pay.TransactionHeader = null;
+                        pay.PaymentMethod = null;
+                        ctx.TransactionPayments.Add(pay);
+                    }
+                    ctx.SaveChanges();
+
+                    return new CommonResult(true, string.Empty, collection);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
         public CommonResult ChangeStatus(int Id)
         {
             try

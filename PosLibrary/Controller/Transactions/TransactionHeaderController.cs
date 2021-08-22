@@ -3,6 +3,7 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Transactions;
+using System.Data.Entity;
 
 namespace PosLibrary.Controller.Transactions
 {
@@ -34,13 +35,11 @@ namespace PosLibrary.Controller.Transactions
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     var lines = ctx.TransactionHeader.Where(a => !a.Deleted && 
-                                                                  a.Condition_Status).ToList();
-                    foreach (var item in lines)
-                    {
-                        var a = item.Customer;
-                        var b = item.TransactionLines.ToList();
-                        var c = item.TransactionPayments.ToList();
-                    }
+                                                                  a.Condition_Status)
+                                                        .Include(a=> a.Customer)
+                                                        .Include(a => a.TransactionLines)
+                                                        .Include(a => a.TransactionPayments)
+                                                        .ToList();
                     return new CommonResult(true, string.Empty, lines);
                 }
             }
@@ -80,10 +79,13 @@ namespace PosLibrary.Controller.Transactions
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     _data.Id = 0;
+                    _data.Customer = null;
+                    _data.TransactionLines = null;
+                    _data.TransactionPayments = null;
                     ctx.TransactionHeader.Add(_data);
                     ctx.SaveChanges();
 
-                    return new CommonResult(true, string.Empty, null);
+                    return new CommonResult(true, string.Empty, _data);
                 }
             }
             catch (Exception ex)

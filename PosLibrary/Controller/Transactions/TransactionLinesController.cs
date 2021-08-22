@@ -3,6 +3,8 @@ using PosLibrary.Model.Entities;
 using System;
 using System.Linq;
 using PosLibrary.Model.Entities.Transactions;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace PosLibrary.Controller.Transactions
 {
@@ -15,9 +17,10 @@ namespace PosLibrary.Controller.Transactions
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var line = ctx.TransactionLines.Where(x => x.Id == Id).FirstOrDefault();
-                    var data_1 = line.TransactionHeader;
-                    var data_2 = line.Item;
+                    var line = ctx.TransactionLines.Where(x => x.Id == Id)
+                                    .Include(a => a.Item)
+                                    .Include(a => a.TransactionHeader)
+                                    .FirstOrDefault();
                     return new CommonResult(true, string.Empty, line);
                 }
             }
@@ -33,7 +36,11 @@ namespace PosLibrary.Controller.Transactions
             {
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.TransactionLines.Where(a => !a.Deleted && a.Condition_Status).ToList();
+                    var lines = ctx.TransactionLines.
+                        Where(a => !a.Deleted && a.Condition_Status)
+                                    .Include(a => a.Item)
+                                    .Include(a => a.TransactionHeader)
+                                    .ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
@@ -54,7 +61,10 @@ namespace PosLibrary.Controller.Transactions
                 using (MainDbContext ctx = new MainDbContext())
                 {
                     var lines = ctx.TransactionLines.Where(a =>(a.ReceiptId.Contains(filter)) &&  
-                                                   !a.Deleted && a.Condition_Status).ToList();
+                                                   !a.Deleted && a.Condition_Status)
+                                    .Include(a => a.Item)
+                                    .Include(a => a.TransactionHeader)
+                                    .ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
@@ -78,6 +88,31 @@ namespace PosLibrary.Controller.Transactions
                     ctx.SaveChanges();
 
                     return new CommonResult(true, string.Empty, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new CommonResult(false, ex.Message, null);
+            }
+        }
+
+        public CommonResult SaveList(object data)
+        {
+            try
+            {
+                var collection = data as List<TransactionLines>;
+
+                using (MainDbContext ctx = new MainDbContext())
+                {
+                    foreach (var item in collection)
+                    {
+                        item.Id = 0;
+                        item.TransactionHeader = null;
+                        item.Item = null;
+                        ctx.TransactionLines.Add(item);
+                    }
+                    ctx.SaveChanges();
+                    return new CommonResult(true, string.Empty, collection);
                 }
             }
             catch (Exception ex)
