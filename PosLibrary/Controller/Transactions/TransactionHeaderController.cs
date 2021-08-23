@@ -58,8 +58,12 @@ namespace PosLibrary.Controller.Transactions
 
                 using (MainDbContext ctx = new MainDbContext())
                 {
-                    var lines = ctx.TransactionHeader.Where(a =>(a.ReceiptId.Contains(filter)) &&  
-                                                   !a.Deleted && a.Condition_Status).ToList();
+                    var lines = ctx.TransactionHeader.Where(a => (a.ReceiptId.Contains(filter)) &&
+                                                   !a.Deleted && a.Condition_Status)
+                                                        .Include(a => a.Customer)
+                                                        .Include(a => a.TransactionLines)
+                                                        .Include(a => a.TransactionPayments)
+                                                        .ToList();
 
                     return new CommonResult(true, string.Empty, lines);
                 }
