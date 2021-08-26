@@ -202,7 +202,7 @@ namespace PosLibrary.Controller.Fiscal
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return GetNcfStatus(ncfId, process);
             }
 
 
@@ -241,7 +241,7 @@ namespace PosLibrary.Controller.Fiscal
             }
             catch (Exception ex)
             {
-                return "No tiene secuencia disponible de NCF... \r\n" + ex.Message;
+                return "No tiene secuencia disponible de NCF...";
             }
         }
 
