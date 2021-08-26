@@ -213,8 +213,10 @@ namespace PosLibrary.Controller.Fiscal
             try
             {
                 NcfSequenceDetail nCF = GetNcfStatus(ncfId, 0);
+                if(nCF == null)
+                    return "No tiene secuencia disponible de NCF...";
 
-                if (nCF.SeqStatus == 2)
+                else if (nCF.SeqStatus == 2)
                 {
                     return "Ultima secuencia de NCF utilizada...";
                 }
