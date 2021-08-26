@@ -196,7 +196,7 @@ namespace PosLibrary.Controller.Fiscal
                     string query = string.Format("Exec usp_ApplyNCFToUse {0}, {1}", ncfId, process);
                     var lines = ctx.Database.SqlQuery<NcfSequenceDetail>(query);
 
-                    return lines.FirstOrDefault();
+                    return lines.FirstOrDefault(); 
                 }
             }
             catch(Exception ex)
